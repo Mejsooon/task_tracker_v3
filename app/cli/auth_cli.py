@@ -21,4 +21,12 @@ def login_screen():
     return None
 
 def register_screen():
-    pass
+    clear_screen()
+    print("REJESTRACJA\n" + "-" * 70)
+    name     = input("Imię i nazwisko: ").strip()
+    username = input("Nazwa użytkownika: ").strip()
+    password = input("Hasło: ").strip()
+
+    ok, msg = auth_service.register(name, username, password)
+    print(f"\n{'✅' if ok else '❌'} {msg}")
+    input("\nNaciśnij Enter...")
