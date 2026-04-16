@@ -1,6 +1,7 @@
 from app.models.models import User
 from app.utils.helpers import clear_screen
 from app.services import task_service
+from app.utils.helpers import multiline_read
 
 def user_panel(user: User):
     while True:
@@ -28,3 +29,35 @@ def user_panel(user: User):
         else:
             print("\n❌ Nieprawidłowa opcja.")
             input("\nNaciśnij Enter...")
+
+def _create_task(user: User):
+    clear_screen()
+    print("NOWE ZADANIE EKSPOZYCYJNE\n" + "-" * 70)
+
+    try:
+        difficulity = int(input("Poziom Trudności (1-10): ").strip())
+    except ValueError:
+        difficulity = 0
+
+    target = multiline_read("\nCel zadania (pusta linia kończy):")
+    description = multiline_read("\n Opi zadania (pusta linia kończy):")
+
+    print("Czy użyć domyślnych pytań refleksyjnych? (t/n): ", end="")
+    if input().strip().lower() == "t":
+        questions = task_service.DEFAULT_REFLECTION_QUESTIONS
+    else:
+        print("\nWpisz pytania refleksyjne (pusta linia kończy):")
+        questions = []
+        while True:
+            q = input().strip()
+            if not q:
+                break
+            questions.append(q)
+
+    ok, msg = task_service.create_task(user.id, difficulity, target, description, questions)
+    print(f"\n{'✅' if ok else '❌'} {msg}")
+    input("\nNaciśnij Enter...")
+
+
+
+
