@@ -56,7 +56,7 @@ def _view_active_task(user: User):
         return
 
     for idx, task in enumerate(tasks, 1):
-        print(f"{idx}. {task.task_description}")
+        print(f"{idx}. {task.description}")
 
     try:
         choice = int(input("\nWybierz zadanie (0 - powrót): ").strip())
@@ -75,14 +75,14 @@ def _view_active_task(user: User):
 
 def _read_task(user: User, task):
     clear_screen()
-    print(f"ZADANIE {task.id}  |  {task.task_description}")
+    print(f"ZADANIE {task.id}  |  {task.description}")
     print("=" * 60)
-    print(f"Poziom trudności: {task.task_difficulty}/10")
+    print(f"Poziom trudności: {task.difficulty}/10")
     print(f"Notatki: {task.additional_notes}")
     print("\n1. Oznacz jako wykonane")
     print("2. Powrót")
 
-    if input("Wybierz opcję: ").strip() == "1":
+    if input("\nWybierz opcję: ").strip() == "1":
         _complete_task(user, task)
 
 
@@ -100,12 +100,12 @@ def _view_history(user: User):
 
     tasks = task_service.find_completed_tasks(user.id)
     if not tasks:
-        print("❌ Nie masz żadnych zadań")
-        input("Naciśnij Enter...")
+        print("\n❌ Nie masz żadnych zadań")
+        input("\nNaciśnij Enter...")
         return
 
     for idx, task in enumerate(tasks, 1):
-        print(f"{idx}. {task.task_description} -> {task.task_difficulty}/10")
+        print(f"{idx}. {task.description} -> {task.difficulty}/10")
         print(f"{task.additional_notes}")
 
     input("\n\nNaciśnij Enter, aby wrócić...")
