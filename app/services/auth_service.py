@@ -1,11 +1,12 @@
 from app.models.models import User
 from app.repositories import user_repository
 from app.utils.helpers import get_next_id
+import bcrypt
 
 
 def authenticate(username: str, password: str):
     user = user_repository.find_by_username(username)
-    if user and user.password == password:
+    if user and bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")): # Porównanie hashy obu haseł.
         return user
     return None
 
@@ -17,11 +18,13 @@ def register_user(name: str, username: str, password: str) -> tuple[bool, str]:
     if not name or not username or not password:
        return False, "❌ Wszystkie pola są wymagane."
 
+    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
     user = User(
         id=get_next_id("U", "users"),
         name=name,
         username=username,
-        password=password
+        password=hashed_password,
     )
 
     user_repository.save(user)
