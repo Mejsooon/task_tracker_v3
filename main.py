@@ -1,6 +1,17 @@
 from app.utils.helpers import clear_screen
 from app.cli.auth_cli import login_screen, register_screen
 from app.cli.main_cli import user_panel
+import logging
+
+
+logging.basicConfig(
+    level=logging.WARNING,       # w produkcji: WARNING i wyżej
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s", # Format komunikatu
+    handlers=[
+        logging.StreamHandler(),              # konsola
+        # logging.FileHandler("app.log")        # przesłanie do pliku
+    ]
+)
 
 
 def main():
